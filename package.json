@@ -1,0 +1,23 @@
+{
+  "name": "acha-esolang",
+  "version": "1.0.0",
+  "description": "its a esolang i am creating out of curiosity",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "code" : "node compiler.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Atuljaat/Acha-Esolang.git"
+  },
+  "keywords": [
+    "esolang"
+  ],
+  "author": "Atul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Atuljaat/Acha-Esolang/issues"
+  },
+  "homepage": "https://github.com/Atuljaat/Acha-Esolang#readme"
+}

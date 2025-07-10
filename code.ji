@@ -1,0 +1,4 @@
+dekhoji a = 10
+dekhoji b = 23
+dekhoji c = a + b
+boloji c
