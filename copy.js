@@ -67,7 +67,6 @@ export function lexer ( code ) {
     }
     console.log(tokens)
     return tokens
-    // console.log(tokens)
 }
 
 

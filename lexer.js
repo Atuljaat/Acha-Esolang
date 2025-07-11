@@ -1,32 +1,16 @@
-const keywords = [ 'dekhoji' , 'boloji' , 'kaiseji', 'ghumoji', 'forji' ]
+const keywords = [ 'dekhoji' , 'boloji' , 'kaiseji' ]
 
 function createTokens (type,value) {
     return { type : type , value : value }
 }
 
-function functionToken ( name , params , body ) {
-    return {
-        type : "function",
-        name : name ,
-        params : params ,
-        body : body
-    }
-}
-
-function loopToken ( loopType, condition, body ) {
-    return {
-        type : "loop",
-        loopType : loopType,
-        condition : condition,
-        body : body
-    }
-}
 
 export function lexer ( code ) {
     // i get code in array form
     // [ 'dekhoji a = 10', 'dekhoji b = 12', 'dekhoji c = a + b', 'boloji c' ]
     const lines = code.trim().split('\n')
     let tokens = []
+    const functionCallRegex = /^([a-zA-Z_]\w*)\(([^()]*)\)$/;
     for ( let line of lines ) {
         let spiltedLine = line.split("")
         let temp_word = ""
@@ -39,70 +23,65 @@ export function lexer ( code ) {
             } 
 
             if ( spiltedLine[i] == " " && commaCount % 2 == 0 ){
-                if (temp_word !== "") {
-                    token.push(temp_word)
-                    temp_word = ""
-                }
+                token.push(temp_word)
+                temp_word = ""
             } else {
                 temp_word += spiltedLine[i]
             }
             i++
         }
-        if (temp_word !== "") {
-            token.push(temp_word)
-        }
-        
+        token.push(temp_word)
+        // console.log(token)
         let fullToken = []
-        for ( let j = 0 ; j < token.length ; j++){
-            let word = token[j] // Fixed: was using undefined 'word' variable
-            
-            if ( word[0] == `"` || word[0] == `'` && word[word.length - 1 ] == `"` || word[word.length - 1] == `'` ){
-                fullToken.push(createTokens('String',word))
-            } else if ( keywords.includes(word) ) {
-
-                if (word == 'kaiseji'){
-                    fullToken.push(createTokens('Function',word))
-                } else if (word == 'ghumoji') {
-                    fullToken.push(createTokens('WhileLoop',word))
-                } else if (word == 'forji') {
-                    fullToken.push(createTokens('ForLoop',word))
-                } else {
-                    fullToken.push(createTokens('Keyword',word))
+        for ( let k = 0 ; k < token.length ; k++){
+            if ( token[k][0] == `"` || token[k][0] == `'` && token[k][token.length - 1 ] == `"` || token[k][token.length - 1] == `'` ){
+                fullToken.push(createTokens('String',token[k]))
+            } else if ( keywords.includes(token[k]) ) {
+                if (token[k] == 'kaiseji'){
+                    let functionName = token[k+1]
+                    let params = token[k+2]
+                    let closeParam = token[k+3]
+                    fullToken.push(createTokens('Function' , token[k]))
+                    fullToken.push(createTokens('FunctionName' , functionName))
+                    fullToken.push(createTokens('FunctionParams' , params))
+                    fullToken.push(createTokens('Delimiter',closeParam))
+                    k = k + 3
                 }
-
-            } else if ( /^(\+|\-|\*|\/|%|==|!=|<=|>=|<|>|=)$/.test(word) ){
-                fullToken.push(createTokens('Operator',word))
-            } else if ( !isNaN(word) && isFinite(word) ) {
-                fullToken.push(createTokens('Number',word))
-            } else if ( /^[{}();,]$/.test(word) ) {
-                fullToken.push(createTokens('Delimiter',word))
-            } else  {
-                fullToken.push(createTokens('Identifier',word))
+                else {
+                    fullToken.push(createTokens('Keyword',token[k]))
+                }
+            } else if ( /^(\+|\-|\*|\/|%|==|!=|<=|>=|<|>|=)$/.test(token[k]) ){
+                fullToken.push(createTokens('Operator',token[k]))
+            } else if ( !isNaN(token[k]) && isFinite(token[k]) ) {
+                fullToken.push(createTokens('Number',token[k]))
+            } else if (token[k] === '{' || token[k] === '}') {
+                fullToken.push(createTokens('Delimiter', token[k]))
+            } else if ( functionCallRegex.test(token[k]) ) {
+                let match = token[k].match(functionCallRegex)
+                let funcName = match[1]
+                let funcParam = `(${match[2]})`
+                fullToken.push(createTokens('FunctionCall' , funcName))
+                fullToken.push(createTokens('CallParams' , funcParam))
+            }
+            else  {
+                fullToken.push(createTokens('Identifier',token[k]))
             }
         } 
-
-        if (fullToken.length > 0) {
-            tokens.push(fullToken)
-        }
+        tokens.push(fullToken)
     }
     console.log(tokens)
     return tokens
 }
 
-const code = 
-`
+
+
+const code = `
+kaiseji abc (a,b) {
+boloji a
+}
+dekhoji b = 12
+abc(b)
 boloji "Hello World"
-kaiseji (a) {
-    boloji a
-}
-ghumoji (i < 10) {
-    boloji i
-    dekhoji i = i + 1
-}
-forji (i = 0; i < 5; i++) {
-    boloji "Iteration"
-    boloji i
-}
 `
 
 lexer(code)

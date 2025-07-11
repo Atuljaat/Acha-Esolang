@@ -1,4 +1,7 @@
 dekhoji a = 10
 dekhoji b = 23
 dekhoji c = a + b
-boloji c
+kaiseji abc (a,b) {
+boloji a
+}
+abc(c)
