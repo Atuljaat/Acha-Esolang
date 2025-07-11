@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "code" : "node compiler.js"
+    "code" : "node runner.js"
   },
   "repository": {
     "type": "git",
