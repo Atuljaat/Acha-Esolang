@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { Editor } from '@monaco-editor/react'
 import { Button } from '@/components/ui/button'
 import { FaPlay } from 'react-icons/fa'
-import {runCode} from '../Esolang/runner'
+import {runCode} from '../myesolang/runner'
 
 function Playground() {
   const editorRef = useRef(null)
