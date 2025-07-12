@@ -1,4 +1,4 @@
-const keywords = ["dekhoji", "boloji", "kaiseji","dijiye"];
+const keywords = ["dekhoji", "boloji", "kaiseji","dijiye","suniyeji","ignoreji"];
 
 function createTokens(type, value) {
     return { type: type, value: value };
@@ -75,7 +75,16 @@ export function lexer(code) {
                         }
                         fullToken.push(createTokens("returning",token[k+1]))
                         k = k + 1 
+                } else if (token[k] === "ignoreji") {
+                    if (token[k + 1] == null || token[k + 1] == "") {
+                        throw new Error(
+                            `ignoreji ke baad kuch nahi hai line ${lineNumber + 1}`
+                        );
                     }
+                    fullToken.push(createTokens("Ignore", token[k]));
+                    fullToken.push(createTokens("IgnoreValue", token[k + 1]));
+                    k = k + 1;
+                } 
                 else {
                     fullToken.push(createTokens("Keyword", token[k]));
                 }
@@ -107,20 +116,20 @@ export function lexer(code) {
         }
         tokens.push(fullToken);
     }
-    // console.log(tokens)
+    console.log(tokens)
     return tokens;
 }
 
 const code = `
-dekhoji a = 10
-dekhoji b = 23
-dekhoji c = a + b
-kaiseji abc (a) {
-boloji a
-dijiye a
+kaiseji add (a, b) {
+  dijiye a + b
 }
-dekhoji d = abc(a) 
-boloji d
+kaiseji greet (name) {
+  boloji name
+}
+add(5,3)
+greet("You")
+
 `;
 
 lexer(code);

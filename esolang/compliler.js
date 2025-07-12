@@ -2,7 +2,9 @@ const values = {
     dekhoji : "let",
     boloji : "console.log",
     kaiseji : "function",
-    dijiye : "return"
+    dijiye : "return",
+    suniyeji : "const",
+    ignoreji : "//"
 }
 
 
@@ -10,6 +12,7 @@ export function compile(tokens) {
     let code = ''
     let delimiterCount = 0
     let functionStack = []
+    let variablesStack = []
     for ( let token of tokens ) {
         // console.log('Token => ',token)
         let line = ""
@@ -49,6 +52,8 @@ export function compile(tokens) {
           } else {
             line += `${values[first.value]} ${token[1].value}`
           }
+        } else if ( first.type == 'Ignore' ) {
+            line += `${values[first.value]} ${token[1].value}`
         }
         else {
             for ( let word of token ) {
@@ -66,7 +71,7 @@ export function compile(tokens) {
       throw new Error(`${functionStack[0]} Function is not closed properly `)
     }
     code = code.trim()
-    // console.log(code)
+    console.log(code)
     return code
 }
 
@@ -87,53 +92,40 @@ export function compile(tokens) {
 //         { type: "String", value: '"acha ji"' },
 //     ],
 // ];
+
 const example = [
   [
-    { type: 'Keyword', value: 'dekhoji' },
-    { type: 'Identifier', value: 'a' },
-    { type: 'Operator', value: '=' },
-    { type: 'Number', value: '10' }
+    { type: 'Function', value: 'kaiseji' },     
+    { type: 'FunctionName', value: 'add' },     
+    { type: 'FunctionParams', value: '(a,' },   
+    { type: 'Delimiter', value: 'b)' },
+    { type: 'Delimiter', value: '{' }
   ],
   [
-    { type: 'Keyword', value: 'dekhoji' },
-    { type: 'Identifier', value: 'b' },
-    { type: 'Operator', value: '=' },
-    { type: 'Number', value: '23' }
-  ],
-  [
-    { type: 'Keyword', value: 'dekhoji' },
-    { type: 'Identifier', value: 'c' },
-    { type: 'Operator', value: '=' },
-    { type: 'Identifier', value: 'a' },
+    { type: 'Return', value: 'dijiye' },        
+    { type: 'returning', value: 'a' },
     { type: 'Operator', value: '+' },
     { type: 'Identifier', value: 'b' }
   ],
+  [ { type: 'Delimiter', value: '}' } ],        
   [
-    { type: 'Function', value: 'kaiseji' },
-    { type: 'FunctionName', value: 'abc' },
-    { type: 'FunctionParams', value: '(a)' },
+    { type: 'Function', value: 'kaiseji' },     
+    { type: 'FunctionName', value: 'greet' },   
+    { type: 'FunctionParams', value: '(name)' },
     { type: 'Delimiter', value: '{' }
   ],
   [
     { type: 'Keyword', value: 'boloji' },
-    { type: 'Identifier', value: 'a' }
-  ],
-  [
-    { type: 'Return', value: 'dijiye' },
-    { type: 'returning', value: 'a' }
+    { type: 'Identifier', value: 'name' }
   ],
   [ { type: 'Delimiter', value: '}' } ],
   [
-    { type: 'Keyword', value: 'dekhoji' },
-    { type: 'Identifier', value: 'd' },
-    { type: 'Operator', value: '=' },
-    { type: 'FunctionCall', value: 'abc' },
-    { type: 'CallParams', value: '(a)' },
-    { type: 'Number', value: '' }
+    { type: 'FunctionCall', value: 'add' },
+    { type: 'CallParams', value: '(5,3)' }
   ],
   [
-    { type: 'Keyword', value: 'boloji' },
-    { type: 'Identifier', value: 'd' }
+    { type: 'FunctionCall', value: 'greet' },
+    { type: 'CallParams', value: '("You")' }
   ]
 ]
 
