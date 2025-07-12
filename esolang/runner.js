@@ -2,6 +2,15 @@
 import { lexer } from './lexer.js'
 import { compile } from './compliler.js'
 
+const code =
+    `
+dekhoji a = 10
+dekhoji b = 12
+dekhoji c = a + b
+boloji c
+boloji "hello world"
+boloji "This is Achaji language"
+`
 
 const Keywords = ['dekhoji', 'boloji']
 

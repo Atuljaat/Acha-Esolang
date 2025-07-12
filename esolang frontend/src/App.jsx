@@ -1,4 +1,4 @@
-import Playground from "../pages/playground"
+import Playground from "../pages/Playground"
 import Documentation from "../pages/Documentation"
 import Navbar from "./components/ui/Navbar"
 
