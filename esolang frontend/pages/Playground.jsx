@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { Editor } from '@monaco-editor/react'
 import { Button } from '@/components/ui/button'
 import { FaPlay } from 'react-icons/fa'
-import {runCode} from '../../esolang/runner.js'
+import {runCode} from '../esolang/runner.js'
 
 function Playground() {
   const editorRef = useRef(null)
@@ -12,7 +12,7 @@ function Playground() {
     editorRef.current = editor;
   }
 
-  function runcode () {
+  function runcode () {``
     const code = editorRef.current.getValue();
     const result = runCode(code);
     setOutput(result);

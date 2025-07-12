@@ -24,6 +24,7 @@ dekhoji name = "Tom"`,
   dijiye a + b
 }
 
+
 kaiseji greet (name) {
   boloji "Hello " + name
 }
@@ -46,8 +47,6 @@ dekhoji x = 10
 ignoreji initialize x`,
   },
 ];
-
-
 
   return (
     <div className="bg-secondary-foreground text-secondary mx-auto px-4 py-8">
